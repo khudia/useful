@@ -1,0 +1,22 @@
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<form action="?" method="get" name="frmProduct"></form>
+<input onclick="submitAction()" type="button" value="submit">
+<div id="info"></div>
+<script type="text/javascript">
+    function submitAction()
+    {
+        grecaptcha.render
+        (	
+        	document.getElementById('info'),
+        	{
+        		'sitekey':'123123123123123123',
+        		'callback':'responseG'
+        	}
+        )
+    }
+    function responseG(res){
+    	if(res){
+    		document.frmProduct.submit();
+    	}
+    }
+</script>
