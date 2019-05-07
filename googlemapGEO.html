@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style> #g3map{
+			height: 50vh;
+			margin-bottom: 50px;
+		}
+	</style>
+</head>
+
+<body>
+    <div id="g3map"></div>
+    <form action="#" id="g3mapForm">
+        <input type="text" id="g3mapQuery" value="Москва">
+        <input type="submit">
+    </form>
+    <div id="geo"></div>
+    <div id="street"></div>
+    <script>
+    var g3map = {
+        map: null,
+        markers: [],
+        center: {
+            lat: 59.856601,
+            lng: 30.197136
+        },
+        markerGeo: null,
+        markerStreet:null,
+        id: 'g3map',
+        init: function() {
+            var that = this;
+            var container = document.getElementById(that.id)
+            var map = new google.maps.Map(container, {
+                zoom: 12,
+                center: that.center,
+                mapTypeControl: false,
+                zoom: 3
+            });
+            map.addListener('click', function(event) {
+                that.addMarker(this, event.latLng.lat(), event.latLng.lng());
+                that.getAddressByGeo(event.latLng.lat(), event.latLng.lng())
+            });
+            var form = document.getElementById('g3mapForm')
+            form.addEventListener('submit', function(evt) {
+                evt.preventDefault();
+                that.geocodeAddress(map)
+            })
+        },
+        geocodeAddress: function(mapsource) {
+            var that = this
+            var geocoder = new google.maps.Geocoder();
+            var address = document.getElementById('g3mapQuery').value;
+            geocoder.geocode({
+                'address': address
+            }, function(results, status) {
+                if (status === 'OK') {
+                    var lat = results[0].geometry.location.lat()
+                    var lng = results[0].geometry.location.lng()
+                    that.markerGeo = { lat: lat, lng: lng }
+                    mapsource.setCenter({ lat: lat, lng: lng });
+                    that.addMarker(mapsource, lat, lng)
+                	that.getAddressByGeo(lat, lng)
+                }
+            });
+        },
+        getAddressByGeo:function(lat,lng){
+        	var that = this
+            var latlng = new google.maps.LatLng(lat, lng);
+            var geocoder = geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        that.markerStreet = results[1].formatted_address;
+                        document.getElementById('street').innerHTML = that.markerStreet
+                    }
+                }else{
+                	that.markerStreet = null;
+                        document.getElementById('street').innerHTML = that.markerStreet
+                }
+            });
+        },
+        updateGeo(){
+        	document.getElementById('geo').innerHTML = this.markerGeo.lat +':'+this.markerGeo.lng
+        },
+        addMarker: function(mapsource, lat, lng) {
+            var that = this
+            that.deleteMarker()
+            that.markerGeo = { lat: lat, lng: lng }
+            that.updateGeo()
+            var marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: mapsource,
+                draggable: true,
+            });
+            marker.addListener('dragend', function() {
+                var lat = this.position.lat()
+                var lng = this.position.lng()
+                mapsource.setCenter({ lat: lat, lng: lng });
+                that.markerGeo = { lat: lat, lng: lng }
+                that.getAddressByGeo(lat, lng)
+                that.updateGeo(lat, lng)
+            })
+            that.markers.push(marker);
+        },
+        deleteMarker: function() {
+            var that = this
+            for (var i = 0; i < that.markers.length; i++) {
+                that.markers[i].setMap(null);
+            }
+            that.markers = []
+        }
+    }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=[API_KEY]&callback=g3map.init"></script>
+</body>
+
+</html>
