@@ -1,3 +1,4 @@
+<?
 $array = Array();
 $array[1] = $main_array = array ('a', 'b', 'c', 'd');
 $size = sizeof($array[1]);
@@ -18,3 +19,4 @@ for ($count = 2; $count <= $size; $count++) {
   unset($array[$arr_name]);
 }
 print_r($main_array);
+?>
