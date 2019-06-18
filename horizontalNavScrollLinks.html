@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Document</title>
+    <style>
+    	body{
+    		padding: 0;
+    		margin:0;
+    	}
+    .topBar {
+        background: #263238;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 22px;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 20px 0;
+        text-align: center;
+    }
+    .container {
+        margin: 0 auto;
+        padding: 0;
+        max-width: auto;
+    }
+    .navBar {
+        background: #455A64;
+    }
+    .nav {
+    	transition: all .5s linear;
+    	scroll-behavior: smooth;
+        margin: 0 0;
+        padding: 0 10px;
+        list-style: none;
+        display: flex;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    .nav>li>a {
+        padding: 14px 16px;
+        display: block;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+    .nav>li>a.active {
+        border-bottom: 2px solid #E64A19;
+    }
+
+
+  
+    </style>
+   
+</head>
+
+<body>
+    <nav class="navBar" id="app">
+        <div class="container">
+            <ul class="nav" id="nav">
+                <li><a @click="activate()" href="javascript:void(0);" class="navitem active">Home</a></li>
+                <li><a @click="activate()" href="javascript:void(0);" class="navitem">Blog</a></li>
+                <li><a @click="activate()" href="javascript:void(0);" class="navitem">Products</a></li>
+                <li><a @click="activate()" href="javascript:void(0);" class="navitem">Services</a></li>
+                <li><a @click="activate()" href="javascript:void(0);" class="navitem">Help</a></li>
+                <li><a @click="activate()" href="javascript:void(0);" class="navitem">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+  
+    	 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    	new Vue({
+    		el:'#app',
+    		data:{
+    			center:''
+    		},
+    		methods:{
+    				activate(){
+    					var target = event.target
+    					var targetX = target.getBoundingClientRect();
+    					var half = target.offsetWidth / 2
+    					var pageCenter = window.innerWidth / 2
+    					var all = document.getElementsByClassName('navitem')
+    					for (var i = 0; i < all.length; i++) {
+    						 all[i].classList.remove('active')
+    					}
+    					target.classList.add('active')
+    					document.getElementById('nav').scrollLeft += targetX.x - pageCenter + half
+    				}
+    		}
+    	})
+
+    </script>
+    </script>
+</body>
+
+</html>
