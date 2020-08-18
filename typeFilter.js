@@ -8,8 +8,8 @@
 */
 class TypeFilter {
   init() {
-    document.querySelector(self.buttons).classList.add('active');
     let self = this;
+    document.querySelector(self.buttons).classList.add('active');
     document.querySelectorAll(self.buttons).forEach(x => {
       x.addEventListener('click', () => {
         document.querySelectorAll(self.buttons).forEach(e => {
@@ -40,7 +40,6 @@ class TypeFilter {
     this.buttons = buttons;
 
     if (document.querySelector(this.items) && document.querySelector(this.buttons)) {
-      console.clear();
       this.init();
     }
   }
@@ -50,4 +49,3 @@ class TypeFilter {
 document.addEventListener("DOMContentLoaded", function () {
   new TypeFilter('.fItem', '.fType');
 });
-
