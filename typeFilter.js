@@ -16,15 +16,25 @@ class TypeFilter {
   bindButtons(){
       self =this
     self.buttons.forEach(x => {
+        let id = x.getAttribute('data-ftype');
+        if(id == 0){
+          self.resetBtn = x
+        }
         x.addEventListener('click', (e) => {
-          let id = x.getAttribute('data-ftype');
-          if(self.id == 0){
-              x.classList.add(self.active);
-              self.id = id
-              self.hideAll()
-              self.showById(id)
-              return
+          if(id == 0){
+             if(self.id != 0){
+                self.hideAll()
+                self.showAll()
+                self.buttons.forEach((b)=>{b.classList.remove(
+                  self.active);
+                });
+                x.classList.add(self.active);
+                x.classList.remove('cursor-pointer')
+                self.id = 0
+                return 
+             }
           }
+         
           if(self.id == id ){
               x.classList.remove(self.active);
               self.id = 0
@@ -39,6 +49,13 @@ class TypeFilter {
               self.showById(id)
               return
           }
+          if(self.id > 0){
+            x.classList.add(self.active);
+            self.id = id
+            self.hideAll()
+            self.showById(id)
+            return
+        }
         });
       });
   }
@@ -77,16 +94,21 @@ class TypeFilter {
     })
   }
   showById(id){
+    let self = this
     this.items.forEach(f => {
-            if (f.getAttribute('data-ftype') == id) {
+            if (f.getAttribute('data-ftype') == id && id > 0) {
               f.style.removeProperty('display');
+              self.resetBtn.classList.add('cursor-pointer')
             }
           });
   }
   showAll(){
+    let self = this
     this.items.forEach(f => {
             f.style.removeProperty('display');
         });
+        self.resetBtn.classList.remove('cursor-pointer')
+        self.resetBtn.classList.add(self.active)
   }
   constructor(itemsInit, buttonsInit, active) {
         let self = this
